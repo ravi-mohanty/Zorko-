@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"> <!--this is amazing just use the emit by clicking the html:5 thats it-->
+   <head> <!--key point here is we cant directly target the tags insted we target the elements by creating it-->
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Namaste react!</title>
+      <link rel="stylesheet" href="index.css"> <!--dont forgot to add this to link the css file-->
+   </head>
+   <body>
+      <div id="root"></div> <!--when we are rendering the root element, all the things that are inside of the root element will be over ridden while rendering , if there are elements that are present on top or below 
+      it wont get effected because we are rendering the root elemnet only hence anything inside the root will get effected -->
+      <!-- <script> -->
+           <!-- const heading = document.createElement("h1"); 
+            heading.textContent = 'hello world from Js';
+            const root = document.getElementById("root"); 
+            
+            /*Remember, when using built-in browser APIs like
+             getElementById, createElement, etc., you usually need to call them on the document object, which represents the entire HTML document.*/
+
+            /* here we are pointing the root element which we hace created alredy , but it was normal html 
+            to point to it we have done this so that , so that we can put stuff inside of it, bcz we cant directly point any tag directly */ 
+          
+            /* The root element acts as a container for our dynamically created elements. 
+            This separation allows us to keep our static HTML (if any) separate from our dynamically generated content.*/
+            
+            /*browser alredy knows the getElemenetById, creatreElement, etc all the api , thats how he is able to fetch or get the values of it, but it doesnt know the react */
+
+           /* root.appendChild(heading);*/  /*here no single or double inverted commas */ 
+      </script> -->
+            <script 
+             crossorigin
+             src="https://unpkg.com/react@18/umd/react.development.js"
+            ></script>
+            <script 
+               crossorigin
+               src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+            ></script> <!--these are the cdns for iporting the react these library are placed on some other sercers which we are pulling it here-->
+            <script src="./App.js"></script>
+    </body>
+</html>
