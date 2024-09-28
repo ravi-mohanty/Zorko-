@@ -21,3 +21,9 @@
    - HTTPs -- npx parcel index.html --https {it will provide hosting in https} 
    - tree shaking -- remove unused code , which is not been used 
    - Different dev and prod. bundles { prod will take more time than dev , bcz of more optimization }
+
+   // "scripts": {
+//   "start": "parcel index.html",
+//   "build": "parcel build index.html",
+//   "test": "jest"
+// } ---> this is jason script changes

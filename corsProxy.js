@@ -95,7 +95,7 @@
 // Use the proxy middleware for all routes
 // app.use('/', apiProxy);
 
-// // Set the port
+// Set the port
 // const PORT = process.env.PORT || 3001;
 
 // // Start the server
