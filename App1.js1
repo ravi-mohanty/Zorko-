@@ -1,3 +1,12 @@
+
+/* Learnig : react component
+             react element 
+             jsx
+             calling function inside component 
+             use of {} [put the function variable]
+             component inside component </>
+
+
 import "./index.css";
 import React from "react"; 
 import ReactDOM from "react-dom/client";
@@ -209,16 +218,20 @@ now we are adding node package manager into our project
 
     /*const heading = React.createElement("h1", {id: "heading"}, "Namaste React-By ravi " ); /* this will create a react object its not yet converted to html element, when we render this object it will convert into html element*/
     const jsxHeading = <h1 className="head" tabInsex= "1">Namaste React in JSX!!!</h1> /*now we are using the classname = head where class is the keyword that is been used in html this is difference,  this is the jsx used to create react object , this is similar to create an object using react, 
-
-    const jsxHeading = <h1 className="head">Namaste React in JSX!!!</h1> /*now we are using the classname = head where class is the keyword that is been used in html this is difference,  this is the jsx used to create react object , this is similar to create an object using react, 
+    /* we are using this circular bracket to let babale know that this is completing here only for jsx , if there are multiple lines than we use this () */
+   /*const jsxHeading = <h1 className="head">Namaste React in JSX!!!</h1> /*now we are using the classname = head where class is the keyword that is been used in html this is difference,  this is the jsx used to create react object , this is similar to create an object using react, 
     IMP --> As this is not a pure js as we are using the jsx which is not the part of the js , this conversion of jsx to js is {called transpiled--> which is not done by parcel itself --> done by babel{library}} done by parcel which is then understood by es6 */
     const root = ReactDOM.createRoot(document.getElementById("root"));  /* now we are rendering on to the browser therefore we are using ReactDOM , this line is important because we are creating the root element inside of that root all
     the code get render whether it is react / jsx */
    /* 
     behind the scene of JSX --> JSX is converted to react element(JS object ) -->render --> html element */
-    root.render(jsxHeading); /* why css is not applied here , as it was applied on react ele. ? */
-    /*ReactDOM.render(document.getElementById("jsxHeading"));*/
-
+    /*root.render(jsxHeading); /* why css is not applied here , as it was applied on react ele. ? */
+    /*ReactDOM.render(document.getElementById("jsxHeading"));, Now I am commneting this out and making its reactComponent */
+   const Title = () => (
+      <h1 className="head" tabINdex="5">
+         Namaste react In JSX
+      </h1>
+   )
 
    /* JSX {Javascript syntax} is html-like/ xml-like syntax which is not html in js */
   /* Do we also render the react element using jsx if not than how it will got into the DOM ? ----> this is also rendered we render it just by putting the referenced obj. to render function */
@@ -230,3 +243,53 @@ now we are adding node package manager into our project
    3] than I run "npm cache clean --force"
    4]npm run build--> npm start
    5] Always remember the difference where to use reactDOM and where to use react , creating root, creating element --*/
+   /* installing prettier - code formater --> this is used to format the code when we saved a code it will automatically 
+   format the ugly looking coded */ 
+   /* we have aslo installed bracket pair colourizer */
+   /*---------------------------------------------------------------------------------------------------------------------------------------------
+    components : class based[old way--js class used for it] and funcational based[new way-- js fucntion used ] 
+    fucntional componenet -- > *return jsx* , also use capital letter to start with */
+
+    const HeadingComponent1 = ()=> {
+      return <h1>Namaste React functional component</h1>; /*fucntion that return jsx/react element ---->   functional component  */
+    }
+    /*   Another way of writing without return only if there is only single line of code */
+     const HeadingComponent2 = () => ( <h1 className ="heading">Namste react type 2 </h1> ); /* we can also do the nesting of it too */
+   
+   const HeadingComponent12 = () => ( 
+      <div id="container">
+         <Title />  
+         <h1 className="Heading">Namaste react functional component</h1>
+      </div>
+
+   ) 
+   
+   /* <Title></Title> it can also be written like this way also
+  {Title()} --> this will aslo work becuse functional component is nothing but a js function */
+   
+   /* we are placing component inside of a component , we render only 1 component other is automatically get render 
+   this is called component composition */
+   number = 10000;
+   const HeadingComponent = () => ( 
+      <div id="container">
+        {number} 
+        <h1 className="Heading">Namaste react functional component</h1>
+      </div>
+   )
+
+   const elem = (
+      <h1 id ="ele">React element</h1>
+   ) /* this is react element */
+   const RectComp = () => (
+      <h1 className ="Rcom">
+         {elem}          this is elemnt inside the component
+      </h1>
+   )
+   /* {} this will senetise the data what ever the daata is sent either in api or any other like js format dont direcelty execute it */
+   /* here we are tring to put the react ele. inside the react functional comp. this is how it is done */
+
+
+  /* here numvber is a js --> we are placing the js inside the jsx code ,previouly we are putting the html inside the js --> jsx */
+  /* root.render(<HeadingComponent/>);/* this is how react componenet get rendered, we are putting the angular brakcet to make bable understand that this is a
+   react component not the element, we are only rendering the head thats y we are not getting the reactElement print on the console */
+   root.render(<RectComp/>);

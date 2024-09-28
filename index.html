@@ -3,38 +3,47 @@
    <head> <!--key point here is we cant directly target the tags insted we target the elements by creating it-->
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Namaste react!</title>
-      <link rel="stylesheet" href="index.css"> <!--dont forgot to add this to link the css file-->
-   </head>
+      
+       <link rel="stylesheet" href="./index.css"> 
+       <title>Namaste react!</title>
+       <!-- dont forgot to add this to link the css file  -->
+   </head> 
    <body>
-      <div id="root"></div> <!--when we are rendering the root element, all the things that are inside of the root element will be over ridden while rendering , if there are elements that are present on top or below 
-      it wont get effected because we are rendering the root elemnet only hence anything inside the root will get effected -->
-      <!-- <script> -->
-           <!-- const heading = document.createElement("h1"); 
-            heading.textContent = 'hello world from Js';
-            const root = document.getElementById("root"); 
+      <div id="root">
+          <h1>Ravi is here!</h1>   <!--this will be replaced by the React that we are rendering , this is also a method to check if our React code is rendering or not by placing something here inside root-->>
+      </div> <!--when we are rendering the root element, all the things that are inside of the root element will be over ridden while rendering , if there are elements that are present on top or below 
+             it wont get effected because we are rendering the root elemnet only hence anything inside the root will get effected -->
+             <!-- <script> -->
+      
+              <!-- const heading = document.createElement("h1"); 
+             heading.textContent = 'hello world from Js';
+             const root = document.getElementById("root"); 
             
-            /*Remember, when using built-in browser APIs like
+             /*Remember, when using built-in browser APIs like
              getElementById, createElement, etc., you usually need to call them on the document object, which represents the entire HTML document.*/
 
-            /* here we are pointing the root element which we hace created alredy , but it was normal html 
-            to point to it we have done this so that , so that we can put stuff inside of it, bcz we cant directly point any tag directly */ 
+             /* here we are pointing the root element which we hace created alredy , but it was normal html 
+             to point to it we have done this so that , so that we can put stuff inside of it, bcz we cant directly point any tag directly */ 
           
-            /* The root element acts as a container for our dynamically created elements. 
-            This separation allows us to keep our static HTML (if any) separate from our dynamically generated content.*/
+             /* The root element acts as a container for our dynamically created elements. 
+              This separation allows us to keep our static HTML (if any) separate from our dynamically generated content.*/
             
-            /*browser alredy knows the getElemenetById, creatreElement, etc all the api , thats how he is able to fetch or get the values of it, but it doesnt know the react */
+              /*browser alredy knows the getElemenetById, creatreElement, etc all the api , thats how he is able to fetch or get the values of it, but it doesnt know the react */
 
-           /* root.appendChild(heading);*/  /*here no single or double inverted commas */ 
-      </script> -->
-            <script 
+             /* root.appendChild(heading);*/  /*here no single or double inverted commas */ 
+             /* </script>  */
+             <script 
              crossorigin
              src="https://unpkg.com/react@18/umd/react.development.js"
-            ></script>
-            <script 
+             ></script>
+             <script 
                crossorigin
                src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
-            ></script> <!--these are the cdns for iporting the react these library are placed on some other sercers which we are pulling it here-->
-            <script src="./App.js"></script>
-    </body>
+             ></script> --these are the cdns for iporting the react these library are placed on some other sercers which we are pulling it here-->
+       <script type="module" src="./src/App.js"></script> <!--here we are telling that our App.js is not a js file 
+            becz normal js file doesnt have the module init , so it is a module type-->
+   </body>
 </html>
+<!--what is happening here is it is showing error react is not found , though we have installed react 
+but system not able to get from where this react common from , it is just installed 
+we need to import it as well, which we will be doing at out app.js -->
