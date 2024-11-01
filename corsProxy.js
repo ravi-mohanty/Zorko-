@@ -274,10 +274,21 @@ const cors = require('cors');  // Make sure this line is present
 const axios = require('axios');
 
 const app = express();
-
+app.use(express.json())
 // Use cors middleware
-app.use(cors());
+const corsOptions = {
+  // origin: `${process.env.WEBSITE}`,
+  origin: `http://localhost:1234/`,
+  credentials:true
+};
+app.use(cors(corsOptions))
 
+app.get("/",(req,res)=>{
+  console.log(req);
+  
+  res.send("sever is working")
+  })
+  
 // Proxy endpoint
 app.use('/api', async (req, res) => {
   const targetUrl = `https://www.swiggy.com${req.url}`;
@@ -302,6 +313,7 @@ app.use('/api', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
+
 
 app.listen(PORT, () => {
   console.log(`Proxy server is running on http://localhost:${PORT}`);

@@ -15,11 +15,27 @@
                           basic information*/
                   
 import "../index.css";
+//import Menulist from "./components/Menulist";
+import RestaurantMenu from "./components/RestaurantMenu";
 import Body from "./components/Body";
 import Header from "./components/Header";
 import RestaurantCard from "./components/ReataurantCard";
-import React from "react"; 
-import ReactDOM from "react-dom/client"; 
+import React, {lazy, Suspense} from "react";    // this is given by react only 
+import ReactDOM from "react-dom/client";  
+import About from "./components/About";
+//import RestaurantMenu from "./components/Restaurant";
+import Error from "./components/Error";
+import Contact from "./components/contact_us";
+
+import { createBrowserRouter, RouterProvider, Outlet} from "react-router-dom"; // it will create a routimg configuration for the router, here cr 
+import Grocery from "./components/Grocery";
+//import Grocery from "./components/Grocery"; now we dont need this once we have provided to the import fucntion [the path], which is given by react only, inside the lazy function[given by react]
+
+
+const  Gerocery = lazy(() =>import("./components/Grocery"));
+// why are we doing all these-- > so that we can load the grocery as lazy laoding [when ever it needed than only its jsz will get loaded]
+// we can see it on the dist folder that grocery has its own js file .
+// when we click on grocery than it will do lazzy loading, it will take few sec to load it, meanwhile it will thorugh the error bcz it wont get the o/p as per need , to handle this we need Suspense [a compoent given by react]
 
 
 const Header = () => {
@@ -1011,14 +1027,65 @@ const AppLayout = () => {
     return (
       <div className= "app">
         <Header />
-        <Body />
-
+        <Outlet /> 
+        {/* now I need to place particular element {componet} according to the route -> for that react-router-dom provide a component named outlet -> which will be replaced according to the router path
+            as it will replace it automatically nothing to do it extenally,  we cant find its[Outlet] html, bcz it is replaced with the other component we  can see the other replaced component at html
+        */}
       </div>
     );
 };
+
+// now we  are creating a router and than configure that router --> means what will happen on  a specific route what ever be the path we are giving them it will direct to it .
+// it takes the array of object of path
+const appRouter = createBrowserRouter([
+  {
+   path: "/", // this is root route
+   element : <AppLayout />,
+  //  if the path is "/" than load this element {here it is Appplayout component}
+  children: 
+  [
+    {
+      path: "/",
+      element: <Body />, // keep note of the commas at route
+    },
+    {
+      path: "/home",
+      element: <Body />, // keep note of the commas at route
+    },
+    { // to  keep the header and footer at its own place we need to create the child of app layout where we route to other pages
+      path: "/about",  //curently it is not working if we click on the swiggy page header--> just creating the configuration doesnt work , we need to pass it to the render page--> that is done by RouterProvider{this is also a compomnent} [ this provides the routing configuration to the app]which is also given by createRouterDom
+      element: < About/>,
+    },
+    {
+      path: "/grocery",
+      element: <Suspense fallback={
+        <h1>Loding the page !!</h1>}>
+           <Grocery /> 
+      </Suspense>,
+    },
+    {
+      path: "/contact",
+      element: <Contact />,
+    }, // now about and contact have become the child of app layout
+   {
+     path: "/restaurant/:resid", // here we are using the dynamic data for the restaurant which can be achived by :[any id] 
+     element: <RestaurantMenu />,
+   },
+  
+  ] ,
+  
+  errorElement: <Error />, 
+   // this is error handler component , it is cpatured by errorElement not just simple element
+  },
+  
+]); 
+
+// if we give the wrong url or path than we get the error msg 404 not found , actully there were many errors reactRouterDom is creating a page and showing this error to us, now we are tring to implement our own error page
  
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<AppLayout/>);
+// root.render(<AppLayout/>);  I have commented it bcz we need to pass the applayout to router provider so that it will render the routing path
+root.render(<RouterProvider router = {appRouter} />  ); // here app router is the configuration of the router we are passing it to render 
+
  /* this is a common practice to create a main app component and placing the other cpomponent 
 inside of it */
 /* conflict design ui--> our website is driven by data let say offer section present at indore is not the same as offer at Mumbai , this is depend on the data that we get through api 

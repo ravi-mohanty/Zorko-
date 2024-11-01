@@ -7,9 +7,11 @@ const RestaurantCard = (props) => {
     // following the best practices here --> directly destructuring it and using as a variable 
     //  ? here is the optional chanining 
       return ( 
-        <div className="res-card" style={{backgroundColor: "babypink"}}>  
+        <div className="res-card p-4 m-4 w-[200px]" style={{backgroundColor: "babypink"}}>  
         {/* note: Resturnt card is a react compopnent it reutrns jsx we are using 2 brackets  bcz 1st one is bcz of putting js inside the jsx and
-        the 2nd one is for passing the object literals  */}
+        the 2nd one is for passing the object literals 
+        
+        here I have given the width of 200px -> this is the manual option to give the width this is actually giving the dynamic classes to css*/}
             <img
               className="res-logo"
               alt="res-logo"
