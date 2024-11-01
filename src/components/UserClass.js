@@ -8,7 +8,7 @@ class UserClass extends React.Component {
         console.log(props);
         this.state = {
             count: 0,
-            // this is similiar to const [count] = useState(0);
+            // this is similiar to const [count] = useState(0); this is a big obj. we can also add more state variables to it 
         }
         
     }
@@ -26,10 +26,12 @@ class UserClass extends React.Component {
                 {/* here without destructuring we cant use count like this either use it this.state.count  */}
                 
                 <button onClick={()=>{
-                    //never directly update the state variable, react provide a setstate fuc. that is used for setting the state of the state var.
+                    //never directly update the state variable, react provide a setstate fuc. that is used for setting the state of the state var., we have the setCount or the helper function that help us to update the variable to update the state variable inside the fun. component 
                     this.setState({count : this.state.count + 1});
-                // when I am using the curely braces than I can using the colon but when I dnt use it just use the equal to sign 
-                  }
+                // we are passing the object in setstate , this is the updated val. that we pass into it  .
+                 // setstate takes the obj. here can be multiple counts if we need to increse it , we can pass it here only in a single batch . 
+            
+            }
                 }
             > Count Increase </button> 
                   {/* // +++ this is very important to save the file and than use it exportedly  */}

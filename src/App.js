@@ -1061,7 +1061,8 @@ const appRouter = createBrowserRouter([
       element: <Suspense fallback={
         <h1>Loding the page !!</h1>}>
            <Grocery /> 
-      </Suspense>,
+      </Suspense>, 
+      // we are using the Suspense and fallback so that it can tell for that particular time what can we show .
     },
     {
       path: "/contact",
