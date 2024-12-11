@@ -1,5 +1,8 @@
 # namaste react 
 --------------------------
+ 
+# start the server : npm run start:server   {1}
+# make application up : npm start           {2}
 
 # parcel :
    - Dev build
