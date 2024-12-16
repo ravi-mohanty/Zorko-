@@ -6,14 +6,16 @@ import { useParams } from "react-router-dom"; // what is there in the param give
 // here I am tring to fetch the data from body which is both fetching and displaying the data but I failed , 
 // what I was trying the fetching of the restaurants should be done here [within the component and we will display it through the component , all its logic will be fetched here ]
 const RestaurantMenu = () => {
-    const [menuItems, setMenuItems] = useState([]);
+    const [menuItems, setMenuItems] = useState([]); // why are we passsing the empty array here
    // const {resId} = useParams();
    // const {resInfo} = useRestaurantMenu(resId);
    // console.log(param);
   
-    useEffect(() => {
+    useEffect(() => {  // when I have commented it I no longer getting the error from the component side--> now I am getting the error from the mnap
       const menu = apiData.data.cards[4].groupedCard.cardGroupMap.REGULAR.cards[1].card.card.carousel;
-      setMenuItems(menu);
+      setMenuItems(menu); //--> I have commmented it so to check useRestaurant menu returned array and display that only.
+     // const menu = useRestaurantMenu();
+      //setMenuItems(menu1);        // when clicked restaurant menu get disturbed 
     }, []); // we are creating the emepty dependecy array so that while our comp. get render for the first time than only useEffect get called , if we dont use the empty dep. array than every time the comp. get render this useEff will get called 
     // and we doent want that 
   

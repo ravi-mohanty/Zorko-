@@ -1,8 +1,9 @@
 # namaste react 
 --------------------------
  
-# start the server : npm run start:server   {1}
-# make application up : npm start           {2}
+# start the server : npm run start:server     {1}
+
+# make application up : npm start  --> we are provided with the link just paste it on the browser                                       {2}
 
 # parcel :
    - Dev build
@@ -25,8 +26,4 @@
    - tree shaking -- remove unused code , which is not been used 
    - Different dev and prod. bundles { prod will take more time than dev , bcz of more optimization }
 
-   // "scripts": {
-//   "start": "parcel index.html",
-//   "build": "parcel build index.html",
-//   "test": "jest"
-// } ---> this is jason script changes
+  

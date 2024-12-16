@@ -1,8 +1,8 @@
-// this is the custom component this will contain the fetch logic 
+// this is the custom hook this will contain the fetch logic , tha basi difference between the hook and the component is hook dosnt return jsx, custom hook cant be used without component.
 import { useState, useEffect } from "react";
 //const [resInfo, setresInfo] = useState();
-const useRestaurantMenu = (resId) =>{
-      const [listOfRestaurants, setlistOfRestaurant]=useState([]);
+const useRestaurantMenu = () =>{
+      const [listOfRestaurants, setlistOfRestaurant]=useState([]); // need to check why we are passing the empty array here --> so that we cans store the list of restaurants returned .
       const [filteredRestaurant, setfilteredRestaurant] = useState([]);
       useEffect(()=> { 
         fetchData();
@@ -28,7 +28,7 @@ const useRestaurantMenu = (resId) =>{
          const restaurantCard = json.data.cards.find(card => 
            card?.card?.card?.gridElements?.infoWithStyle?.restaurants
          );
-         console.log(restaurantCard);
+         console.log(restaurantCard +"ravi yess");
  
            if (restaurantCard) {
              setlistOfRestaurant(restaurantCard.card.card.gridElements.infoWithStyle.restaurants);
@@ -42,7 +42,7 @@ const useRestaurantMenu = (resId) =>{
          } catch (error) {
           console.error('Error fetching restaurants:', error);
         }
-        return listOfRestaurants;
+        return listOfRestaurants; // we are returning the value from the custom hook
         }; 
 }
 export default useRestaurantMenu;
