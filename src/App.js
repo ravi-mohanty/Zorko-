@@ -1043,7 +1043,7 @@ const appRouter = createBrowserRouter([
    path: "/", // this is root route
    element : <AppLayout />,
   //  if the path is "/" than load this element {here it is Appplayout component}
-  children: 
+  children:   // we are creating the child route so that the header remian intact and we can also route to other page as well, now here body, about every route bencome the child of appLayout
   [
     {
       path: "/",
@@ -1051,7 +1051,7 @@ const appRouter = createBrowserRouter([
     },
     {
       path: "/home",
-      element: <Body />, // keep note of the commas at route
+      element: <Body/>, // keep note of the commas at route
     },
     { // to  keep the header and footer at its own place we need to create the child of app layout where we route to other pages
       path: "/about",  //curently it is not working if we click on the swiggy page header--> just creating the configuration doesnt work , we need to pass it to the render page--> that is done by RouterProvider{this is also a compomnent} [ this provides the routing configuration to the app]which is also given by createRouterDom
@@ -1070,8 +1070,9 @@ const appRouter = createBrowserRouter([
       element: <Contact />,
     }, // now about and contact have become the child of app layout
    {
-     path: "/restaurant/:resid", // here we are using the dynamic data for the restaurant which can be achived by :[any id] 
-     element: <RestaurantMenu />,
+      path: "/restaurant/:resid",
+      element: <RestaurantMenu/>
+  
    },
   
   ] ,

@@ -25,7 +25,7 @@ const Body = () => {
  
         if (restaurantCard) {
           const restaurants = restaurantCard.card.card.gridElements.infoWithStyle.restaurants;
-          setlistOfRestaurant(restaurants);
+          setlistOfRestaurant(restaurants);        // we are updating both of them becz setFilteredrestuarant, whatever we are searching it be used, if we are searching on the empty search it will appear from the listofrestaurants
           setfilteredRestaurant(restaurants);
           console.log("Restaurants fetched successfully:", restaurants);
         } else {
@@ -83,8 +83,8 @@ const Body = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16">
-        {filteredRestaurant.map((restaurant) => (
-          <Link 
+        {filteredRestaurant.map((restaurant) => (           // here we are usisng the filteredrestaurant so that we have copy of the original data so that after the search we can search we can search it again 
+          <Link                                          // when we have searched the restaurant than after that clicking the home it is not redirecting to the home page
             key={restaurant.info.id}
             to={"/restaurant/" + restaurant.info.id}
             className="transform hover:scale-105 transition-transform duration-200"

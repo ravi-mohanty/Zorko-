@@ -1,43 +1,136 @@
-import apiData from "../utils/apiData";
-import { useState, useEffect } from "react";
-import useRestaurantMenu from "../utils/useRestaurantMenu";
-import { useParams } from "react-router-dom"; // what is there in the param given by this useParam hook from react router dom
+import React, { useState, useEffect } from 'react';
 
-// here I am tring to fetch the data from body which is both fetching and displaying the data but I failed , 
-// what I was trying the fetching of the restaurants should be done here [within the component and we will display it through the component , all its logic will be fetched here ]
 const RestaurantMenu = () => {
-    const [menuItems, setMenuItems] = useState([]); // why are we passsing the empty array here
-   // const {resId} = useParams();
-   // const {resInfo} = useRestaurantMenu(resId);
-   // console.log(param);
-  
-    useEffect(() => {  // when I have commented it I no longer getting the error from the component side--> now I am getting the error from the mnap
-      const menu = apiData.data.cards[4].groupedCard.cardGroupMap.REGULAR.cards[1].card.card.carousel;
-      setMenuItems(menu); //--> I have commmented it so to check useRestaurant menu returned array and display that only.
-     // const menu = useRestaurantMenu();
-      //setMenuItems(menu1);        // when clicked restaurant menu get disturbed 
-    }, []); // we are creating the emepty dependecy array so that while our comp. get render for the first time than only useEffect get called , if we dont use the empty dep. array than every time the comp. get render this useEff will get called 
-    // and we doent want that 
-  
+  const [menuData, setMenuData] = useState(null);
+  const [quantities, setQuantities] = useState({});
+
+  const handleAddItem = (itemId) => {
+    setQuantities(prev => ({
+      ...prev,
+      [itemId]: (prev[itemId] || 0) + 1
+    }));
+  };
+
+  const handleRemoveItem = (itemId) => {
+    setQuantities(prev => {
+      const newQuantity = (prev[itemId] || 0) - 1;
+      if (newQuantity < 1) {
+        const newQuantities = { ...prev };
+        delete newQuantities[itemId];
+        return newQuantities;
+      }
+      return {
+        ...prev,
+        [itemId]: newQuantity
+      };
+    });
+  };
+
+  const fetchData = async () => {
+    try {
+      const resData = await fetch(
+        "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=22.7195687&lng=75.8577258&restaurantId=690867&catalog_qa=undefined&submitAction=ENTER"
+      );
+      const jsonData = await resData.json();
+      const cardData = jsonData?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards;
+      
+      const menuCard = cardData.find(card => 
+        card?.card?.card?.['@type'] === "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+      );
+
+      const menuItems = menuCard?.card?.card?.itemCards || [];
+      
+      const processedMenuItems = menuItems.map(item => ({
+        name: item?.card?.info?.name,
+        price: item?.card?.info?.price,
+        description: item?.card?.info?.description,
+        isVeg: item?.card?.info?.isVeg,
+        imageId: item?.card?.info?.imageId,
+        id: item?.card?.info?.id
+      }));
+
+      setMenuData(processedMenuItems);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (!menuData) {
     return (
-      <div className="p-4">
-        <h2 className="text-2xl font-bold mb-4">Recommended Items</h2>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl font-semibold">Loading...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-4 bg-gray-50 min-h-screen">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">Our Menu</h1>
         <div className="space-y-4">
-          {menuItems.map((item) => (
-            <div 
-              key={item.dish.info.id} 
-              className="border p-4 rounded-lg shadow-sm"
-            >
-              <h3 className="font-semibold text-lg">{item.dish.info.name}</h3>
-              <p className="text-gray-600">
-                Price: ₹{(item.dish.info.price / 100).toFixed(2)}
-              </p>
-              <p className="text-sm text-gray-500">ID: {item.dish.info.id}</p>
+          {menuData.map((item) => (
+            <div key={item.id} className="flex justify-between gap-4 bg-white p-4 rounded-lg shadow">
+              <div className="flex-grow">
+                <div className="w-4 h-4 mb-2">
+                  <div className={`border-2 ${item.isVeg ? 'border-green-600' : 'border-red-600'} rounded-sm`}>
+                    <div className={`w-2 h-2 m-0.5 rounded-full ${item.isVeg ? 'bg-green-600' : 'bg-red-600'}`}></div>
+                  </div>
+                </div>
+                
+                <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
+                <p className="text-base font-medium text-gray-800 mb-2">₹{item.price / 100}</p>
+                {item.description && (
+                  <p className="text-sm text-gray-500">{item.description}</p>
+                )}
+              </div>
+
+              <div className="relative w-32 h-24 flex-shrink-0">
+                {item.imageId && (
+                  <img 
+                    src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_208,h_208,c_fit/${item.imageId}`}
+                    alt={item.name}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                )}
+                <div className="absolute -bottom-3 -right-2 transform translate-y-1/2">
+                  {!quantities[item.id] ? (
+                    <button 
+                      onClick={() => setQuantities(prev => ({ ...prev, [item.id]: 1 }))}
+                      className="bg-white text-green-600 px-4 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-gray-50"
+                    >
+                      ADD
+                    </button>
+                  ) : (
+                    <div className="flex items-center bg-white rounded-lg shadow-md border border-gray-200">
+                      <button 
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="px-3 py-1 text-green-600 font-bold hover:bg-gray-50"
+                      >
+                        -
+                      </button>
+                      <span className="px-2 py-1 text-green-600 font-medium">
+                        {quantities[item.id]}
+                      </span>
+                      <button 
+                        onClick={() => handleAddItem(item.id)}
+                        className="px-3 py-1 text-green-600 font-bold hover:bg-gray-50"
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           ))}
         </div>
       </div>
-    );
-  };
-  
+    </div>
+  );
+};
+
 export default RestaurantMenu;
