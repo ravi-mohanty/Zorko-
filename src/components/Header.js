@@ -38,11 +38,13 @@ const Header = () => {
                     {/* here I am individually giving the padding towards x on each li */}
                      <Link to="/about">About us</Link>
                      </li>
+                     {/* here we are using the link, that doenst refresh the page like anchor tag, but behind the scene it uses the anchor tag only  */}
                     <li className="px-3">
                        <Link to="/grocery">Grocery Store</Link>
                     </li>
                     <li className="px-3">
-                       <Link to="/contact">Contact Us</Link>
+                       <Link to="/contact">Contact Us</Link> 
+
                     </li>
                     <li className="px-3">cart</li>
                 <button className="loggin" onClick={()=>{

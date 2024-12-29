@@ -1070,10 +1070,9 @@ const appRouter = createBrowserRouter([
       element: <Contact />,
     }, // now about and contact have become the child of app layout
    {
-      path: "/restaurant/:resid",
-      element: <RestaurantMenu/>
-  
-   },
+    path: "restaurant/:resId",
+    element: <RestaurantMenu />
+  },
   
   ] ,
   
