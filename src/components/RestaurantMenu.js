@@ -1,24 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Plus, Minus } from 'lucide-react';
-import { useParams } from 'react-router-dom';   // this is used for receiving the dynamic routes.
+import { useParams } from 'react-router-dom';
+import useRestaurantMenu from '../utils/useRestaurantMenu';
 
 const RestaurantMenu = () => {
-
-    const {resId} = useParams(); // we are destructuring it here .
+  const { resId } = useParams();
   const [menuCategories, setMenuCategories] = useState([]);
   const [expandedCategories, setExpandedCategories] = useState({});
   const [itemCounts, setItemCounts] = useState({});
-  
+  const contentRefs = useRef({});
+ // const jsonData =  useRestaurantMenu(resId);
+
   const fetchData = async () => {
+   // console.log("entering into the try catch");
     try {
-      const response = await fetch("https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=22.7195687&lng=75.8577258&restaurantId=" + resId + "&catalog_qa=undefined&submitAction=ENTER");
-      const jsonData = await response.json();
-      
+        //console.log("entered into the try catch");
+
+        const response = await fetch(`https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=22.7195687&lng=75.8577258&restaurantId=${resId}&catalog_qa=undefined&submitAction=ENTER`);
+        const jsonData = await response.json();
+      //console.log(`this is ${jsonData}`);
       const directData = jsonData?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards;
-      
+
       const processedCategories = directData.reduce((acc, element) => {
         const cardData = element?.card?.card;
-        
+
         if (cardData?.['@type'] === "type.googleapis.com/swiggy.presentation.food.v2.NestedItemCategory") {
           cardData.categories.forEach(category => {
             if (category.itemCards) {
@@ -38,8 +43,7 @@ const RestaurantMenu = () => {
               });
             }
           });
-        } 
-        else if (cardData?.['@type'] === "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory") {
+        } else if (cardData?.['@type'] === "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory") {
           if (cardData.itemCards) {
             acc.push({
               title: cardData.title,
@@ -59,7 +63,7 @@ const RestaurantMenu = () => {
         }
         return acc;
       }, []);
-      
+
       setMenuCategories(processedCategories);
     } catch (error) {
       console.error("Error fetching menu data:", error);
@@ -68,7 +72,7 @@ const RestaurantMenu = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [resId]);
 
   const formatPrice = (price) => {
     return (price / 100).toFixed(2);
@@ -95,6 +99,16 @@ const RestaurantMenu = () => {
     }));
   };
 
+  useEffect(() => {
+    Object.keys(expandedCategories).forEach(index => {
+      if (expandedCategories[index]) {
+        contentRefs.current[index].style.maxHeight = `${contentRefs.current[index].scrollHeight}px`;
+      } else {
+        contentRefs.current[index].style.maxHeight = '0px';
+      }
+    });
+  }, [expandedCategories]);
+
   return (
     <div className="p-4 max-w-3xl mx-auto">
       {menuCategories.map((category, index) => (
@@ -111,9 +125,11 @@ const RestaurantMenu = () => {
             />
           </button>
           
-          <div className={`transition-all duration-300 ${
-            expandedCategories[index] ? 'max-h-[2000px]' : 'max-h-0'
-          } overflow-hidden`}>
+          <div 
+            ref={el => contentRefs.current[index] = el} 
+            className="transition-max-height duration-300 overflow-hidden"
+            style={{ maxHeight: expandedCategories[index] ? `${contentRefs.current[index].scrollHeight}px` : '0px' }}
+          >
             <div className="space-y-4 p-4">
               {category.items.map((item) => (
                 <div key={item.id} className="border p-4 pb-6 rounded-lg shadow-sm relative">
@@ -132,7 +148,9 @@ const RestaurantMenu = () => {
                         </div>
                       )}
                       {item.description && (
-                        <p className="text-sm text-gray-500 mt-2">{item.description}</p>
+                        <p className="text-sm text-gray-500 mt-2 line-clamp-2 overflow-hidden text-ellipsis">
+                          {item.description}
+                        </p>
                       )}
                       {item.isBestseller && (
                         <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded mt-2 inline-block">
@@ -146,8 +164,9 @@ const RestaurantMenu = () => {
                           src={`https://media-assets.swiggy.com/swiggy/image/upload/${item.imageId}`}
                           alt={item.name}
                           className="w-32 h-32 object-cover rounded"
+                          style={{ minWidth: '128px', minHeight: '128px' }}
                         />
-                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-full max-w-[90px]">
+                        <div className="absolute bottom-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-full max-w-[90px]">
                           {itemCounts[item.id] ? (
                             <div className="flex items-center bg-white border rounded-lg shadow-md justify-center">
                               <button 

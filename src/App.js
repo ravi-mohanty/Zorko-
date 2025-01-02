@@ -33,7 +33,7 @@ import Grocery from "./components/Grocery";
 
 
 const  Gerocery = lazy(() =>import("./components/Grocery"));
-// why are we doing all these-- > so that we can load the grocery as lazy laoding [when ever it needed than only its jsz will get loaded]
+// why are we doing all these-- > so that we can load the grocery as lazy laoding [when ever it needed than only its jsx will get loaded]
 // we can see it on the dist folder that grocery has its own js file .
 // when we click on grocery than it will do lazzy loading, it will take few sec to load it, meanwhile it will thorugh the error bcz it wont get the o/p as per need , to handle this we need Suspense [a compoent given by react]
 
