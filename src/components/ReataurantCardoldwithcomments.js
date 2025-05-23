@@ -29,8 +29,8 @@ const RestaurantCard = (props) => {
                <h1>{name}</h1>  
               
               {/* join here is used to seperate the cuisines with comma */}
-               <h4>{cuisines.join(",")}</h4>
-               <h4>{avgRatingString}</h4> 
+               <h4>{cuisines.join(",")}</h4> 
+                <h4>{avgRatingString}</h4> 
                <h4>{deliveryTime} minutes</h4>  
               
                {/* carefully check the api given who is umder what  */}

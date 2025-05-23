@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Shimmer from "./shimmer";
 import useOnlineStatus from "../utils/useOnlineStaus";
-
+import  RestaurantCard from "./RestaurantCard";
 const Body = () => {
   const [listOfRestaurants, setlistOfRestaurant] = useState([]);
   const [searchText, setSearchText] = useState(""); 
-  const [filteredRestaurant, setfilteredRestaurant] = useState([]); 
+  const [filteredRestaurant, setfilteredRestaurant] = useState([]);
+  // Missing state for selectedRestaurantData that appears in the JSX
+  // const [selectedRestaurantData, setSelectedRestaurantData] = useState(null);
    
   useEffect(() => {
     fetchData();
@@ -16,6 +18,8 @@ const Body = () => {
     try {
       const response = await fetch('http://localhost:3000/api/restaurants?lat=12.9715987&lng=77.5945627');
       const json = await response.json();
+      console.log("print json");
+      console.log(json);
 
       if (json?.data?.cards) {
         // Find the card that contains the restaurant list
@@ -25,7 +29,9 @@ const Body = () => {
  
         if (restaurantCard) {
           const restaurants = restaurantCard.card.card.gridElements.infoWithStyle.restaurants;
-          setlistOfRestaurant(restaurants);        // we are updating both of them becz setFilteredrestuarant, whatever we are searching it be used, if we are searching on the empty search it will appear from the listofrestaurants
+          setlistOfRestaurant(restaurants);
+          // we are updating both of them because setFilteredRestaurant will be used for searching
+          // if we are searching on the empty search it will appear from the listOfRestaurants
           setfilteredRestaurant(restaurants);
           console.log("Restaurants fetched successfully:", restaurants);
         } else {
@@ -52,16 +58,17 @@ const Body = () => {
               value={searchText}
               onChange={(e) => {
                 setSearchText(e.target.value);
-              }}
+                console.log("inside body");
+              }}                                 // here for both the seach and the top rated are using the same state variable , as we are using one at a time.
               placeholder="Search restaurants..."
             />
             <button
               className="px-6 py-2 bg-lime-200 border border-lime-300 rounded-r hover:bg-lime-300 transition-colors duration-200"
               onClick={() => {
-                const filteredRestaurant = listOfRestaurants.filter(restaurant => 
+                const filteredRestaurants = listOfRestaurants.filter(restaurant => 
                   restaurant.info.name.toLowerCase().includes(searchText.toLowerCase())
                 );
-                setfilteredRestaurant(filteredRestaurant);
+                setfilteredRestaurant(filteredRestaurants);
               }}
             >
               Search
@@ -72,7 +79,7 @@ const Body = () => {
             className="w-full md:w-auto px-6 py-2 bg-orange-400 text-white rounded hover:bg-orange-500 transition-colors duration-200"
             onClick={() => {
               const filteredList = listOfRestaurants.filter(
-                (res) => res.info.avgRating > 4
+                (res) => res.info.avgRating > 4.4
               );
               setfilteredRestaurant(filteredList);
             }}
@@ -81,42 +88,13 @@ const Body = () => {
           </button>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16">
-        {filteredRestaurant.map((restaurant) => (           // here we are usisng the filteredrestaurant so that we have copy of the original data so that after the search we can search we can search it again 
-          <Link                                          // when we have searched the restaurant than after that clicking the home it is not redirecting to the home page
-          // header get intact its not getting reload --single page application
-            key={restaurant.info.id}
-            to={"/restaurant/" + restaurant.info.id}
-            className="transform hover:scale-105 transition-transform duration-200"
-          >
-            <div className="bg-white p-4 rounded-lg shadow-md h-full">
-              <img 
-                src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/${restaurant.info.cloudinaryImageId}`}
-                alt={restaurant.info.name}
-                className="w-full h-48 object-cover rounded-lg mb-4"
-              />
-              <div className="space-y-2">
-                <h3 className="font-bold text-lg truncate">{restaurant.info.name}</h3>
-                <p className="text-gray-600 text-sm line-clamp-2">{restaurant.info.cuisines.join(", ")}</p>
-                <div className="flex justify-between items-center">
-                  <span className="flex items-center gap-1">
-                    <span className={`px-2 py-1 rounded ${
-                      restaurant.info.avgRating >= 4 ? 'bg-green-500' : 'bg-orange-500'
-                    } text-white text-sm`}>
-                      ★ {restaurant.info.avgRating}
-                    </span>
-                  </span>
-                  <span className="text-gray-600 text-sm">{restaurant.info.sla.deliveryTime} mins</span>
-                </div>
-                <p className="text-gray-600 text-sm truncate">{restaurant.info.locality}</p>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
+    
+<RestaurantCard listOfRestaurants={filteredRestaurant} />   
+ </div> // the RestaurantCard will show all the data of the restaurant in the imgaes
   );
-}
+};
 
 export default Body;
+
+// understanding : wether we are searching for the top rated or we are searching for a specific restaurant, when ever a search will change the state variable it will 
+// re-render the compoennt, 

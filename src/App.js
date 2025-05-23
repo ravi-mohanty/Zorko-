@@ -19,7 +19,7 @@ import "../index.css";
 import RestaurantMenu from "./components/RestaurantMenu";
 import Body from "./components/Body";                            // carefull while changing the name, it will automatically change the nmae of the file where is has used
 import Header from "./components/Header";
-import RestaurantCard from "./components/ReataurantCard";
+import RestaurantCard from "./components/RestaurantCard";
 import React, {lazy, Suspense} from "react";    // this is given by react only 
 import ReactDOM from "react-dom/client";  
 import About from "./components/About";
