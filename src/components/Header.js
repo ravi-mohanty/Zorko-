@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { LOGO_URL } from "../utils/constants";
 import { useState } from "react";
 import Grocery from "./Grocery";
 import useOnlineStatus from "../utils/useOnlineStaus";
+
+const {userName} = useContext();
+console.log(userName);
 
 import {Link} from "react-router-dom"; // link is also a componet which is given by react-router-dom this helps not to refresh the entire dom when we laod the other pages like about us, contact us etc..if we use href than it will load the entire page again.
 
