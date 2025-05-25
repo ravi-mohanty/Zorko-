@@ -6,8 +6,7 @@ import useRestaurantMenu from '../utils/useRestaurantMenu';
 const RestaurantMenu = () => {
   const { resId } = useParams();
   const [menuCategories, setMenuCategories] = useState([]);
-  const [expandedCategory, setExpandedCategory] = useState(null); // Changed to single value
-    // const [expandedCategories, setExpandedCategories] = useState({});   - here we are taking all the properties, that we dont want
+  const [expandedCategories, setExpandedCategories] = useState({});
   const [itemCounts, setItemCounts] = useState({});
   const contentRefs = useRef({});
  // const jsonData =  useRestaurantMenu(resId);
@@ -80,8 +79,10 @@ const RestaurantMenu = () => {
   };
 
   const toggleCategory = (index) => {
-    // If clicking on already expanded category, close it. Otherwise, open the clicked one
-    setExpandedCategory(prev => prev === index ? null : index);
+    setExpandedCategories(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
   };
 
   const incrementItem = (itemId) => {
@@ -99,18 +100,14 @@ const RestaurantMenu = () => {
   };
 
   useEffect(() => {
-    // Update heights for all categories
-    Object.keys(contentRefs.current).forEach(index => {
-      const indexNum = parseInt(index);
-      if (contentRefs.current[index]) {
-        if (expandedCategory === indexNum) {
-          contentRefs.current[index].style.maxHeight = `${contentRefs.current[index].scrollHeight}px`;
-        } else {
-          contentRefs.current[index].style.maxHeight = '0px';
-        }
+    Object.keys(expandedCategories).forEach(index => {
+      if (expandedCategories[index]) {
+        contentRefs.current[index].style.maxHeight = `${contentRefs.current[index].scrollHeight}px`;
+      } else {
+        contentRefs.current[index].style.maxHeight = '0px';
       }
     });
-  }, [expandedCategory]);
+  }, [expandedCategories]);
 
   return (
     <div className="p-4 max-w-3xl mx-auto">
@@ -123,7 +120,7 @@ const RestaurantMenu = () => {
             <h2 className="text-xl font-bold">{category.title}</h2>
             <ChevronDown 
               className={`transform transition-transform duration-200 ${
-                expandedCategory === index ? 'rotate-180' : ''
+                expandedCategories[index] ? 'rotate-180' : ''
               }`}
             />
           </button>
@@ -131,7 +128,7 @@ const RestaurantMenu = () => {
           <div 
             ref={el => contentRefs.current[index] = el} 
             className="transition-max-height duration-300 overflow-hidden"
-            style={{ maxHeight: expandedCategory === index ? `${contentRefs.current[index]?.scrollHeight || 0}px` : '0px' }}
+            style={{ maxHeight: expandedCategories[index] ? `${contentRefs.current[index].scrollHeight}px` : '0px' }}
           >
             <div className="space-y-4 p-4">
               {category.items.map((item) => (
