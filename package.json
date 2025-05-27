@@ -7,7 +7,9 @@
     "start": "concurrently \"npm run start:proxy\" \"npm run start:app\"",
     "start:app": "parcel index.html",
     "start:proxy": "nodemon corsProxy.js",
-    "start:server": "nodemon server.js"
+    "start:server": "nodemon server.js",
+    "build": "parcel build index.html --dist-dir build",
+    "dev": "npm start"
   },
   "repository": {
     "type": "git",

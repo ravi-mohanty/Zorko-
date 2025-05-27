@@ -6,7 +6,8 @@ import useRestaurantMenu from '../utils/useRestaurantMenu';
 const RestaurantMenu = () => {
   const { resId } = useParams();
   const [menuCategories, setMenuCategories] = useState([]);
-  const [expandedCategories, setExpandedCategories] = useState({});
+  const [expandedCategory, setExpandedCategory] = useState(null); // Changed to single value
+    // const [expandedCategories, setExpandedCategories] = useState({});   - here we are taking all the properties, that we dont want
   const [itemCounts, setItemCounts] = useState({});
   const contentRefs = useRef({});
  // const jsonData =  useRestaurantMenu(resId);
@@ -20,11 +21,13 @@ const RestaurantMenu = () => {
         const jsonData = await response.json();
       //console.log(`this is ${jsonData}`);
       const directData = jsonData?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards;
+      console.log("printing the data here");
+      console.log(directData);
 
       const processedCategories = directData.reduce((acc, element) => {
         const cardData = element?.card?.card;
 
-        if (cardData?.['@type'] === "type.googleapis.com/swiggy.presentation.food.v2.NestedItemCategory") {
+        if (cardData?.['@type'] === "type.googleapis.com/swiggy.presentation.food.v2.Dish") {
           cardData.categories.forEach(category => {
             if (category.itemCards) {
               acc.push({
@@ -32,7 +35,7 @@ const RestaurantMenu = () => {
                 items: category.itemCards.map(item => ({
                   id: item?.card?.info?.id,
                   name: item?.card?.info?.name,
-                  price: item?.card?.info?.price,
+                  price: item?.card?.info?.defaultPrice,
                   description: item?.card?.info?.description,
                   imageId: item?.card?.info?.imageId,
                   rating: item?.card?.info?.ratings?.aggregatedRating?.rating,
@@ -79,10 +82,8 @@ const RestaurantMenu = () => {
   };
 
   const toggleCategory = (index) => {
-    setExpandedCategories(prev => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
+    // If clicking on already expanded category, close it. Otherwise, open the clicked one
+    setExpandedCategory(prev => prev === index ? null : index);
   };
 
   const incrementItem = (itemId) => {
@@ -100,14 +101,18 @@ const RestaurantMenu = () => {
   };
 
   useEffect(() => {
-    Object.keys(expandedCategories).forEach(index => {
-      if (expandedCategories[index]) {
-        contentRefs.current[index].style.maxHeight = `${contentRefs.current[index].scrollHeight}px`;
-      } else {
-        contentRefs.current[index].style.maxHeight = '0px';
+    // Update heights for all categories change is here
+    Object.keys(contentRefs.current).forEach(index => {
+      const indexNum = parseInt(index);
+      if (contentRefs.current[index]) {
+        if (expandedCategory === indexNum) {
+          contentRefs.current[index].style.maxHeight = `${contentRefs.current[index].scrollHeight}px`;
+        } else {
+          contentRefs.current[index].style.maxHeight = '0px';
+        }
       }
     });
-  }, [expandedCategories]);
+  }, [expandedCategory]);
 
   return (
     <div className="p-4 max-w-3xl mx-auto">
@@ -120,7 +125,7 @@ const RestaurantMenu = () => {
             <h2 className="text-xl font-bold">{category.title}</h2>
             <ChevronDown 
               className={`transform transition-transform duration-200 ${
-                expandedCategories[index] ? 'rotate-180' : ''
+                expandedCategory === index ? 'rotate-180' : ''
               }`}
             />
           </button>
@@ -128,7 +133,7 @@ const RestaurantMenu = () => {
           <div 
             ref={el => contentRefs.current[index] = el} 
             className="transition-max-height duration-300 overflow-hidden"
-            style={{ maxHeight: expandedCategories[index] ? `${contentRefs.current[index].scrollHeight}px` : '0px' }}
+            style={{ maxHeight: expandedCategory === index ? `${contentRefs.current[index]?.scrollHeight || 0}px` : '0px' }}
           >
             <div className="space-y-4 p-4">
               {category.items.map((item) => (
@@ -136,7 +141,7 @@ const RestaurantMenu = () => {
                   <div className="flex justify-between">
                     <div className="flex-grow pr-4">
                       <h3 className="font-semibold">{item.name}</h3>
-                      <p className="text-sm text-gray-600">₹{formatPrice(item.price)}</p>
+                      <p className="text-sm text-gray-600">₹{(item.price/100)}</p>
                       {item.rating && (
                         <div className="text-sm text-green-600 flex items-center gap-1 mt-1">
                           <span className="flex items-center bg-green-600 text-white px-1 rounded">
