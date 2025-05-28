@@ -2,7 +2,6 @@
   "name": "namaste-react",
   "version": "1.0.0",
   "description": "This is namste react by Ravi mohanty ",
-  "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run start:proxy\" \"npm run start:app\"",
     "start:app": "parcel index.html",
