@@ -3,14 +3,23 @@ import { LOGO_URL } from "../utils/constants";
 import { useState } from "react";
 import Grocery from "./Grocery";
 import useOnlineStatus from "../utils/useOnlineStaus";
+import { useSelector } from "react-redux";
+import Cart from "./Cart";
 
 import {Link} from "react-router-dom"; // link is also a componet which is given by react-router-dom this helps not to refresh the entire dom when we laod the other pages like about us, contact us etc..if we use href than it will load the entire page again.
+import { useSelector } from "react-redux";
 
 const Header = () => {
    const onLineStatus = useOnlineStatus(); // herre I am using the hook useOnlineStatus which has a feature of checking user is online or offline which contain a widow fuinction  
    const[btnreact, setbtnreact]= useState("Login"); //we generally put the state varibale at the top so that our code become more neat 
     // how setbtnreact is able to change btn react thoughh it is a const. variable --> as it is not the same old variable becz it get updated when the state is changed and tthis time the value is also the updated one 
-     return (
+     const cartItems = useSelector((store) => (store.cart.items)); // use selector provide the access to the store, here it is providing the acess to the 
+     // in the forrm of store , from that store, which slice, within the slice which part of the is get[here item] we want to access
+    // here whenever my cart items get modified my store get modified according to it .
+    
+      console.log("Inside the header");
+
+    return (
      // VIMP thing to note here is : its just a single page application we are routing to other pages from here only --> thats y react is called single page application --just the interchange of the components
      // two types of routing  1) server side routing : previously there were anchor tags --> which will fetch the data from server than reload the entire page 
                           //  2) client side routing : we dont perform the any network request , just load the component only which will get render on the client side [laptop ot pc] 
@@ -46,7 +55,12 @@ const Header = () => {
                        <Link to="/contact">Contact Us</Link> 
 
                     </li>
-                    <li className="px-3">cart</li>
+      
+                    <li className="px-3 font-bold">
+                      <Link to="/cart">
+                         cart-{cartItems.length}
+                      </Link>
+                    </li>
                 <button className="loggin" onClick={()=>{
                  btnreact === "Login"   //note how we can use the if statement
                    ? setbtnreact("logout")

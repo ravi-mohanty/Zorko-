@@ -15,8 +15,7 @@
                           basic information*/
                   
 import "../index.css";
-//import Menulist from "./components/Menulist";
-import RestaurantMenu from "./components/RestaurantMenu";
+import RestaurantMenu from "./components/RestaurantMenu"
 import Body from "./components/Body";                            // carefull while changing the name, it will automatically change the nmae of the file where is has used
 import Header from "./components/Header";
 import RestaurantCard from "./components/RestaurantCard";
@@ -29,6 +28,9 @@ import Contact from "./components/contact_us";
 
 import { createBrowserRouter, RouterProvider, Outlet} from "react-router-dom"; // it will create a routimg configuration for the router, here cr 
 import Grocery from "./components/Grocery";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
+import Cart from "./components/Cart";
 //import Grocery from "./components/Grocery"; now we dont need this once we have provided to the import fucntion [the path], which is given by react only, inside the lazy function[given by react]
 
 
@@ -1024,11 +1026,13 @@ so that it will contain all the returants list , how can we create them ? */
 /* Now we are passing the props to the functional component[which is nothing but js function] -->{similar to passing arguments to the function } , this is used for making things dynamic like passing the props
 to component , so that we can use the same cart again and again just by changing the values by passing props  */
 const AppLayout = () => {
+  console.log("Inside the app");
     return (
       <div className= "app">
-        <Header />
-        <Outlet /> 
-    
+        <Provider store={appStore}>
+           <Header />
+           <Outlet /> 
+        </Provider>
         {/* now I need to place particular element {componet} according to the route -> for that react-router-dom provide a component named outlet -> which will be replaced according to the router path
             as it will replace it automatically nothing to do it extenally,  we cant find its[Outlet] html, bcz it is replaced with the other component we  can see the other replaced component at html
         */}
@@ -1056,6 +1060,10 @@ const appRouter = createBrowserRouter([
     { // to  keep the header and footer at its own place we need to create the child of app layout where we route to other pages
       path: "/about",  //curently it is not working if we click on the swiggy page header--> just creating the configuration doesnt work , we need to pass it to the render page--> that is done by RouterProvider{this is also a compomnent} [ this provides the routing configuration to the app]which is also given by createRouterDom
       element: < About/>,
+    },
+    {
+      path: "/cart",
+      element: <Cart />,
     },
     {
       path: "/grocery",

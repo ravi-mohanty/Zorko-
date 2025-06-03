@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Plus, Minus } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import useRestaurantMenu from '../utils/useRestaurantMenu';
+import { useDispatch } from 'react-redux';
+import { addItem, removeItem } from '../utils/cartSlice';
 
 const RestaurantMenu = () => {
   const { resId } = useParams();
@@ -11,7 +13,7 @@ const RestaurantMenu = () => {
   const [itemCounts, setItemCounts] = useState({});
   const contentRefs = useRef({});
  // const jsonData =  useRestaurantMenu(resId);
-
+ const dispatch = useDispatch();
   const fetchData = async () => {
    // console.log("entering into the try catch");
     try {
@@ -176,6 +178,7 @@ const RestaurantMenu = () => {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   decrementItem(item.id);
+                                  dispatch(removeItem());
                                 }}
                                 className="p-1 hover:bg-gray-100"
                               >
@@ -186,6 +189,10 @@ const RestaurantMenu = () => {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   incrementItem(item.id);
+                                   const cartItem = dispatch(addItem(item));
+                                  //  console.log(`Cart data here ${cartItem} );
+                                    console.log(cartItem);
+
                                 }}
                                 className="p-1 hover:bg-gray-100"
                               >
@@ -197,6 +204,7 @@ const RestaurantMenu = () => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 incrementItem(item.id);
+                                 dispatch(addItem(item));
                               }}
                               className="bg-white text-green-600 px-4 py-1 rounded-lg shadow-md border hover:bg-gray-50 w-full"
                             >
